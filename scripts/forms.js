@@ -29,10 +29,11 @@ document.querySelector("#fname").addEventListener("blur", function(){
 
 //event listener for the postal code field
 //this type of anonymous function is written with the arrow method
-document.querySelector("#pcode").addEventListener("change", () => {
+document.querySelector("#pcode").addEventListener("change", (event) => {
     //when you use the arrow method, "this" doesn't refer to the target element,
     //it refers to the event...
-    
+    //we need a variable to hold the event, and we can refer to the event's target
+    //console.log(event.target.value);
 
     //write the pattern for a canadian postal code
     // A1A 1A1 or A1A1A1 or a1a1a1 or a1a 1a1
@@ -40,5 +41,26 @@ document.querySelector("#pcode").addEventListener("change", () => {
     // \d means any number
     // a ? after a group makes whatever is contained in that group optional
     //we can then add flags after the pattern, like i for case insensitive
-    const postalPattern = /[ABCEGHJKLMNPRSTVXYZ]\d[ABCEGHJKLMNPRSTVXYZ][ ]?\d[ABCEGHJKLMNPRSTVXYZ]\d/i;
+    //a ^ outside of [] means this must be the start of the content
+    //a $ outside of [] means this must be the end of the content
+    const postalPattern = /^[ABCEGHJKLMNPRSTVXYZ]\d[ABCEGHJKLMNPRSTVXYZ][ ]?\d[ABCEGHJKLMNPRSTVXYZ]\d$/i;
+
+    if(postalPattern.test(event.target.value)){
+        //if it's true, then it matches the postal code pattern...
+        event.target.parentNode.querySelector("span").textContent = "";
+    }else{
+        //if the test fails, then it doesn't match the postal code pattern
+        event.target.parentNode.querySelector("span").textContent = "Not a valid postal code";
+    }
+});
+
+//add event listener for email
+document.querySelector("#email").addEventListener("change", function(){
+    //add a pattern for emails...
+    const emailPattern = /[^a-zA-Z0-9.,?:\-@%\/\s_]/;
+
+    const emailPattern2 = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    console.log("Email pattern 1:" + emailPattern.test(this.value));
+    console.log("Email pattern 2:" + emailPattern2.test(this.value));
 });
