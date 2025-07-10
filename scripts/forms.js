@@ -1,5 +1,15 @@
 //add an event listener to the full name input
-document.querySelector("#fname").addEventListener("blur", function(){
+document.querySelector("#fname").addEventListener("blur", checkFullName);
+    
+    
+function checkFullName(e){
+    //check - if we sent a value, then we can use it
+    //but if an event was set, then we need the target of the event
+    if(e.target){
+        field = e.target;
+    }else{
+        field = e;
+    }
     //create a new pattern to use to validate the user input
     //patterns can be something specific, like abc (looking for only those charaters)
     //or you can provide groups, or ranges, of characters, like a-z
@@ -12,19 +22,24 @@ document.querySelector("#fname").addEventListener("blur", function(){
 
     //using the pattern, check (test) if there is a match in what the user has typed
     //give the user a message depending on the result of the check
-    if(fnamePattern.test(this.value)){
+    if(fnamePattern.test(field.value)){
         //if the pattern is true, then it found something that isn't:
         //a lower case letter, an upper case letter, or a space (ie. a number)
-        this.parentNode.querySelector(".validation").textContent = "That's not a name!";
+        field.parentNode.querySelector(".validation").textContent = "That's not a name!";
         //toggle the error class
-        this.classList.add("error");
+        field.classList.add("error");
+        //if there is an error, return "true" to where the function was called
+        //(so we can flag that there was an error and not allow the form to submit)
+        return true;
     }else{
         //if we didn't find anything that shouldn't be there, remove the message
-        this.parentNode.querySelector(".validation").textContent = "";
+        field.parentNode.querySelector(".validation").textContent = "";
         //toggle the error class
-        this.classList.remove("error");
+        field.classList.remove("error");
+        //since we didn't find an error, return false
+        return false;
     }
-});
+};
 
 
 //event listener for the postal code field
@@ -86,7 +101,10 @@ ourForm.addEventListener("submit", function(event){
         console.log("Full name is required");
         //switch the error flag
         formError = true;
-    }
+    }else if(checkFullName(ourForm.elements.fname)){
+        //if we check the value inside of the full name field and it returns true, then there's an error
+        formError = true;
+    };
     
     if(ourForm.elements.pcode.value == ""){
         console.log("Postal code is required");
