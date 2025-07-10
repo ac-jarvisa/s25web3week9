@@ -64,3 +64,38 @@ document.querySelector("#email").addEventListener("change", function(){
     console.log("Email pattern 1:" + emailPattern.test(this.value));
     console.log("Email pattern 2:" + emailPattern2.test(this.value));
 });
+
+
+//validate the form on submit
+//get the form and put it in a variable
+const ourForm = document.querySelector("form");
+
+//add an event listener to the form (event: submit)
+ourForm.addEventListener("submit", function(event){
+    //stop the form from submitting
+    event.preventDefault();
+
+    //create a variable to keep track of whether there is an error
+    let formError = false;
+
+    //we can use the form in our variable as a javascript object
+    //and refer to each of the form fields by their name attribute (in HTML)
+    
+    //test the feilds to see if they are blank, or if they contain the right information
+    if(ourForm.elements.fname.value == ""){
+        console.log("Full name is required");
+        //switch the error flag
+        formError = true;
+    }
+    
+    if(ourForm.elements.pcode.value == ""){
+        console.log("Postal code is required");
+        formError = true;
+    }
+
+    //if form error is true, something is wrong, so we don't submit the form
+    //but if it's still false, then all the checks went through, and we can submit the form
+    if(formError === false){
+        console.log("submit form");
+    }
+});
